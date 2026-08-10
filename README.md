@@ -1,4 +1,3 @@
-````markdown
 # 🛡️ KAUST SOC — APT29 Adversary Emulation and Threat Detection
 
 > A cybersecurity project demonstrating adversary emulation, threat detection, threat hunting, incident response, and security validation in a controlled SOC laboratory.
@@ -285,4 +284,3 @@ The project provided practical experience in:
 All activities were performed in a controlled and authorized laboratory environment.
 
 **Do not use the techniques documented in this repository against any system without explicit authorization.**
-````
