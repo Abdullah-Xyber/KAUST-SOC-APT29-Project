@@ -463,14 +463,19 @@ Recommended evidence includes:
 
 <img width="656" height="289" alt="image" src="https://github.com/user-attachments/assets/cadcee9e-d801-4d52-af45-d2ed8e3866ad" />
 
+
 <img width="273" height="202" alt="image" src="https://github.com/user-attachments/assets/66102c92-461b-4963-ae97-5edb199a866f" />
+
 *Custom CALDERA ability used to emulate HTA-based initial access through mshta.exe and PowerShell.*
 
 ### Final CALDERA Operation Evidence
 <img width="719" height="242" alt="image" src="https://github.com/user-attachments/assets/b7658564-de12-44d9-ac1c-2918eacc25de" />
+
 *Final validated CALDERA operation showing the execution of the attack chain against WS01.*
 
+
 <img width="406" height="62" alt="image" src="https://github.com/user-attachments/assets/518eb1ad-c7dd-4d4d-b220-e693a8017add" />
+
 
 <img width="406" height="53" alt="image" src="https://github.com/user-attachments/assets/46d8cc79-9e5d-4bbd-b1e4-3b7f9e87624e" />
 
