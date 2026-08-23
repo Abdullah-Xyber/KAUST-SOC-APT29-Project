@@ -41,23 +41,23 @@ The containment phase aimed to:
 Containment actions were performed in the following order:
 
 1. Isolate WS01 from the network.
-2. Stop the CALDERA agent process.
+2. Stop the CALDERA agent process on WS01.
 3. Stop the CALDERA agent on any other affected hosts.
 4. Disable the compromised account in Active Directory.
-5. Verify that all containment actions succeeded.
-6. Proceed to eradication only after verification.
+5. Verify that the containment actions succeeded.
+6. Proceed to eradication only after containment was completed.
 
 ---
 
 ## 1. Isolate the Compromised Endpoint
 
-The network adapter on **WS01** was disabled to prevent communication with other laboratory systems and the CALDERA server.
+The network adapter on **WS01** was disabled to prevent communication with the other laboratory systems and the CALDERA server.
 
 ```powershell
 Disable-NetAdapter -Name "Ethernet" -Confirm:$false
 ```
 
-The adapter status was then verified:
+The adapter status was checked using:
 
 ```powershell
 Get-NetAdapter | Select-Object Name, Status
@@ -71,13 +71,7 @@ Name       Status
 Ethernet   Disabled
 ```
 
-This action restricted additional command execution, lateral movement, and simulated data exfiltration from WS01.
-
-### Evidence
-
-![WS01 network isolation](ws01-network-isolation.png)
-
-*Figure 1: Verification that the WS01 Ethernet adapter was disabled.*
+Disabling the network adapter restricted additional command execution, lateral movement, and simulated data exfiltration from WS01.
 
 ---
 
@@ -86,10 +80,11 @@ This action restricted additional command execution, lateral movement, and simul
 The CALDERA agent used during the authorized emulation was terminated on the affected hosts.
 
 ```powershell
-Get-Process splunkd -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Process splunkd -ErrorAction SilentlyContinue |
+    Stop-Process -Force
 ```
 
-The process status was verified using:
+The process status could be checked using:
 
 ```powershell
 Get-Process splunkd -ErrorAction SilentlyContinue
@@ -97,14 +92,18 @@ Get-Process splunkd -ErrorAction SilentlyContinue
 
 No returned process indicated that the CALDERA agent was no longer running.
 
-### Evidence
-
-![CALDERA agent termination](caldera-agent-terminated.png)
-
-*Figure 2: CALDERA agent termination and post-action verification.*
-
 > [!NOTE]
-> The agent was intentionally named `splunkd.exe` by the CALDERA Sandcat deployment. It was not a legitimate Splunk service in this laboratory.
+> The agent was intentionally staged as `splunkd.exe` by the CALDERA Sandcat deployment. It was not a legitimate Splunk service in this laboratory.
+
+---
+
+## Containment Evidence
+
+The retained containment evidence shows the actions performed on the compromised workstation. WS01 was isolated from the laboratory network, and the CALDERA agent process was terminated.
+
+![WS01 network isolation and CALDERA agent termination](ws01-network-isolation.png)
+
+*Figure 1: WS01 network isolation and termination of the CALDERA agent process.*
 
 ---
 
@@ -116,7 +115,7 @@ The compromised account was disabled from the domain controller to prevent furth
 Disable-ADAccount -Identity "ws01"
 ```
 
-The account status was verified using:
+The account status could be verified using:
 
 ```powershell
 Get-ADUser -Identity "ws01" -Properties Enabled |
@@ -131,17 +130,13 @@ Name   Enabled
 ws01   False
 ```
 
-### Evidence
-
-![Compromised account disabled](compromised-account-disabled.png)
-
-*Figure 3: Active Directory verification showing that the compromised account was disabled.*
+The account-disabling action is documented in the final project report and the incident-response playbook. However, no separate screenshot was retained for this action.
 
 ---
 
 ## Containment Verification
 
-| Verification Check | Expected Result | Status |
+| Verification Check | Expected Result | Project Status |
 |:---|:---|:---:|
 | WS01 network adapter | Disabled | ✅ Completed |
 | CALDERA agent on WS01 | Not running | ✅ Completed |
@@ -149,6 +144,9 @@ ws01   False
 | CALDERA agent on DC01 | Not running | ✅ Completed |
 | Compromised AD account | Disabled | ✅ Completed |
 | Further CALDERA execution | Prevented | ✅ Completed |
+
+> [!NOTE]
+> The available screenshot provides visual evidence for WS01 network isolation and CALDERA agent termination. The remaining actions are supported by the documented incident-response execution and playbook in the final project report.
 
 ---
 
@@ -163,13 +161,15 @@ The containment actions successfully:
 - Prevented continued communication with CALDERA
 - Prepared the affected systems for eradication
 
-After confirming these results, the team proceeded to remove persistence mechanisms, staged files, credential-access tools, and CALDERA agent binaries during the eradication phase.
+After completing containment, the team proceeded to remove persistence mechanisms, staged files, credential-access tools, and CALDERA agent binaries during the eradication phase.
 
 ---
 
 ## Limitations
 
-The containment process was performed manually because the laboratory did not include a Security Orchestration, Automation, and Response platform.
+The containment process was performed manually because the laboratory did not include a **Security Orchestration, Automation, and Response (SOAR)** platform.
+
+Not every completed containment action had a separate retained screenshot. The project therefore uses the available screenshot together with the commands, execution narrative, and containment checklist documented in the final report.
 
 In a production environment, equivalent actions should:
 
@@ -184,12 +184,13 @@ In a production environment, equivalent actions should:
 
 ## Lessons Learned
 
-- A compromised endpoint should be isolated before artifacts are removed.
+- A compromised endpoint should be isolated before adversary artifacts are removed.
 - Disabling an account prevents further identity-based access but does not terminate existing malicious processes.
-- Stopping a process alone does not remove its executable or persistence mechanisms.
-- Each containment action must be verified independently.
+- Stopping a process does not remove its executable or persistence mechanisms.
+- Each containment action should be independently verified.
+- Evidence should be captured immediately after every response action.
 - Containment and eradication should be documented as separate incident-response phases.
-- Automated response could reduce containment time, but manual approval remains important for high-impact actions.
+- Automated response could reduce containment time, but manual authorization remains important for high-impact actions.
 
 ---
 
