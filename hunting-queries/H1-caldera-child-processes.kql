@@ -1,0 +1,5 @@
+# H1 - CALDERA Child Processes
+# Target telemetry: Sysmon Event 1
+# Purpose: Identify processes launched by the CALDERA Sandcat agent (staged as splunkd.exe) and use the parent process as a pivot to reconstruct the attack timeline.
+
+event.code:"1" and process.parent.name:"splunkd.exe"

@@ -1,0 +1,5 @@
+# H5 - Command-and-Control Communications
+# Target telemetry: Sysmon Event 3
+# Purpose: Identify outbound network connections toward the CALDERA C2 server and trace command-and-control/exfiltration activity.
+
+event.code:"3" and destination.ip:"172.20.10.20"

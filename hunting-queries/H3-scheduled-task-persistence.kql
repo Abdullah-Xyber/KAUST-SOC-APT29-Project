@@ -1,0 +1,5 @@
+# H3 - Scheduled Task Persistence
+# Target telemetry: Security Event 4698 / Sysmon Event 1
+# Purpose: Identify scheduled-task creation through schtasks.exe or the Register-ScheduledTask PowerShell cmdlet.
+
+event.code:"1" and (process.name:"schtasks.exe" or process.command_line:*Register-ScheduledTask)

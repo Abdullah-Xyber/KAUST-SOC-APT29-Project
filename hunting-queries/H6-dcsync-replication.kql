@@ -1,0 +1,5 @@
+# H6 - DCSync Replication
+# Target telemetry: Security Event 4662 (DC01)
+# Purpose: Identify access to Active Directory replication GUIDs associated with DCSync credential access.
+
+event.code:"4662" and winlog.event_data.Properties:(*1131f6aa* or *1131f6ad*)

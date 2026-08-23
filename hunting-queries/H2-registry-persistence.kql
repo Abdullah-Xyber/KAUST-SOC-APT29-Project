@@ -1,0 +1,5 @@
+# H2 - Registry Persistence
+# Target telemetry: Sysmon Event 13
+# Purpose: Identify Registry Run-key creation and modification activity associated with persistence.
+
+event.code:"13" and registry.path:*CurrentVersion\Run

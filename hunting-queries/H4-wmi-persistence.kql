@@ -1,0 +1,5 @@
+# H4 - WMI Persistence
+# Target telemetry: Sysmon Events 19, 20, 21
+# Purpose: Identify WMI Event Filter, Consumer, and FilterToConsumerBinding registration events associated with WMI persistence.
+
+event.code:"19" or event.code:"20" or event.code:"21"
