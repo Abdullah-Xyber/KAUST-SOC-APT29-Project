@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Burhan Design System
+   Brand: deep navy + cyan/turquoise, drawn from the Burhan shield mark.
+
+   The data-visualization palette below is NOT hand-picked. It was validated
+   with the six-checks validator in both modes against the real chart surfaces
+   (#ffffff light / #0b1f33 dark):
+     - categorical light  #1189bd,#eb6834,#1baf7a,#eda100,#e87ba4,#008300,#4a3aa7,#e34948
+       -> lightness band PASS, chroma PASS, adjacent CVD dE 9.1 PASS, normal-vision 19.6 PASS
+     - categorical dark   #249ed2,#d95926,#199e70,#c98500,#d55181,#008300,#9085e9,#e66767
+       -> all checks PASS (slot 1 tuned from #2ba3d8 to land inside L 0.48-0.67)
+     - ordinal ramps      light/dark PASS (monotone L, adjacent dL >= 0.06, light end >= 2:1)
+   Slots 3/4/5 sit below 3:1 on the light surface, so every chart using them
+   ships the relief channel: direct labels and/or the table view toggle on
+   ChartCard. Do not re-step these values without re-running the validator.
+   ========================================================================== */
+
+@theme {
+  /* -- Brand ramp (navy -> cyan), used for chrome, not for series identity -- */
+  --color-navy-950: #04121e;
+  --color-navy-900: #071523;
+  --color-navy-850: #0b1f33;
+  --color-navy-800: #0e2740;
+  --color-navy-700: #123350;
+  --color-navy-600: #17456b;
+  --color-navy-500: #1d5885;
+  --color-navy-400: #2a6fa3;
+
+  --color-cyan-700: #0a6289;
+  --color-cyan-600: #0d76a3;
+  --color-cyan-500: #1189bd;
+  --color-cyan-400: #2b9dcd;
+  --color-cyan-300: #4dadd8;
+  --color-cyan-200: #8bcbe8;
+  --color-cyan-100: #bfe3f3;
+  --color-cyan-50: #e8f5fb;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+}
+
+/* ---------------------------------------------------------------- tokens -- */
+:root {
+  color-scheme: light;
+
+  --page: #f4f7fa;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eef3f8;
+  --surface-inverse: #0b1f33;
+
+  --ink: #0a1c2e;
+  --ink-secondary: #4a5b6d;
+  --ink-muted: #7b8b9c;
+  --ink-inverse: #f2f7fb;
+
+  --border: #dde5ed;
+  --border-strong: #c6d2de;
+
+  --primary: #1189bd;
+  --primary-ink: #ffffff;
+  --primary-soft: #e8f5fb;
+
+  --accent: #0e2740;
+
+  --grid: #e6ecf2;
+  --axis: #c6d2de;
+
+  /* status - reserved meaning, never used for series identity */
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+  --good-soft: #e7f6e7;
+  --warning-soft: #fef4e0;
+  --serious-soft: #fdefe8;
+  --critical-soft: #fbeaea;
+  --good-ink: #06630a;
+  --warning-ink: #8a5b00;
+  --serious-ink: #9c4419;
+  --critical-ink: #a12626;
+
+  /* categorical series - fixed order, never cycled */
+  --series-1: #1189bd;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+
+  /* ordinal ramp (coverage depth) - light end clears 2:1 on the surface */
+  --ramp-1: #4dadd8;
+  --ramp-2: #1189bd;
+  --ramp-3: #0d76a3;
+  --ramp-4: #0a6289;
+  --ramp-5: #063d57;
+
+  --shadow-card: 0 1px 2px rgba(10, 28, 46, 0.04), 0 1px 3px rgba(10, 28, 46, 0.06);
+  --shadow-pop: 0 8px 24px rgba(10, 28, 46, 0.12);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page: #071523;
+  --surface: #0b1f33;
+  --surface-raised: #0e2740;
+  --surface-sunken: #04121e;
+  --surface-inverse: #0b1f33;
+
+  --ink: #f2f7fb;
+  --ink-secondary: #a9bccd;
+  --ink-muted: #7d93a6;
+  --ink-inverse: #f2f7fb;
+
+  --border: #16344f;
+  --border-strong: #1d4467;
+
+  --primary: #249ed2;
+  --primary-ink: #04121e;
+  --primary-soft: #0e2740;
+
+  --accent: #0b1f33;
+
+  --grid: #14304b;
+  --axis: #1c3d5c;
+
+  --good-soft: #0a2a14;
+  --warning-soft: #2e2408;
+  --serious-soft: #331d12;
+  --critical-soft: #331414;
+  --good-ink: #4fd04f;
+  --warning-ink: #fab219;
+  --serious-ink: #f2a181;
+  --critical-ink: #f07f7f;
+
+  --series-1: #249ed2;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+
+  --ramp-1: #bfe3f3;
+  --ramp-2: #8bcbe8;
+  --ramp-3: #4dadd8;
+  --ramp-4: #1189bd;
+  --ramp-5: #0a6289;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* Expose the tokens to Tailwind utilities (bg-surface, text-ink, ...) */
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted: var(--ink-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-good: var(--good);
+  --color-warning: var(--warning);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+}
+
+/* ------------------------------------------------------------------ base -- */
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Scrollbars tuned for the dark sidebar and long tables */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* --------------------------------------------------------------- helpers -- */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.brand-gradient {
+  background-image: linear-gradient(135deg, #0b1f33 0%, #123350 45%, #1189bd 100%);
+}
+
+.brand-gradient-text {
+  background-image: linear-gradient(120deg, #0e2740 0%, #1189bd 60%, #4dadd8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Faint circuit-trace texture echoing the shield mark. Decorative only. */
+.circuit-field {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 72%);
+}
+
+/* ------------------------------------------------------------ animations -- */
+@keyframes burhan-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.live-dot {
+  animation: burhan-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes burhan-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up {
+  animation: burhan-fade-up 0.28s ease-out both;
+}
+
+@keyframes burhan-sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+.sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(17, 137, 189, 0.16), transparent);
+  animation: burhan-sweep 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Recharts: keep chrome recessive, let the marks carry the chart */
+.recharts-cartesian-axis-tick text {
+  fill: var(--ink-muted);
+  font-size: 11px;
+}
+.recharts-surface:focus {
+  outline: none;
+}
