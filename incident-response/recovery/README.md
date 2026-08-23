@@ -150,15 +150,13 @@ Restoring the network adapter returned WS01 to the internal laboratory network.
 
 ## Recovery Evidence
 
-The retained recovery evidence shows:
+The retained evidence shows that the WS01 network adapter was re-enabled after containment and eradication were completed.
 
-- The WS01 Ethernet adapter restored to an operational state
-- The compromised account’s password reset
-- The compromised account re-enabled
+![WS01 network recovery](ws01-recovery.png)
 
-![WS01 account and network recovery](ws01-recovery.png)
+*Figure 1: WS01 network connectivity restored following containment and eradication.*
 
-*Figure 1: Recovery verification showing WS01 network connectivity restored and the compromised account reset and re-enabled.*
+The compromised account password was reset, configured for mandatory change at the next logon, and re-enabled as documented in the final report. The related screenshot was excluded because it contained sensitive credential information.
 
 ---
 
