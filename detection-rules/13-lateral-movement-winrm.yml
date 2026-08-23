@@ -1,0 +1,17 @@
+name: "APT29 - Lateral Movement via WinRM"
+language: KQL
+risk_score: 73
+mitre_attack:
+  - T1021.006
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "4624" and winlog.event_data.LogonType: "3" and host.name: "ws02" and
+  winlog.event_data.AuthenticationPackageName: "Kerberos" and
+  not winlog.event_data.TargetUserName: (*$ or "ANONYMOUS LOGON")
+description: >
+  Detects network logon sessions (Logon Type 3) originating from WS01 toward WS02, indicating credential-based lateral movement over Windows Remote Management. Tuned to exclude machine-account (trailing $) and anonymous logons after false-positive analysis identified WS01$ domain-operation noise.
+known_false_positives: >
+  Legitimate administrative remote sessions from IT workstations may trigger this rule; verify the source host, destination, and user account before escalating.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

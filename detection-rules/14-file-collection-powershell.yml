@@ -1,0 +1,18 @@
+name: "APT29 - File Collection via PowerShell"
+language: KQL
+risk_score: 50
+mitre_attack:
+  - T1119
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "1" and process.name: ("powershell.exe" or "cmd.exe") and
+  (process.command_line: *Get-ChildItem* or *Copy-Item* or *Get-Content* or *Compress-Archive*) and
+  not (process.command_line: *Get-Location* or *Test-Path* or *Join-Path* or *Invoice*) and
+  (process.command_line: *CompanyData* or *DepartmentData* or *T1119*)
+description: >
+  Detects file enumeration and collection commands executed via PowerShell or CMD, indicating an adversary gathering data from the victim host prior to exfiltration. Tuned to exclude benign path-handling commands that partially matched during initial validation against the HTA spearphishing payload.
+known_false_positives: >
+  Legitimate administrative scripts and IT tools frequently use Get-ChildItem, dir, and Copy-Item for file management; verify user context, parent process, and whether the activity correlates with known administrative tasks.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

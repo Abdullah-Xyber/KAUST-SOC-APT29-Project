@@ -1,0 +1,18 @@
+name: "APT29 - WMI Event Subscription Persistence"
+language: EQL
+risk_score: 99
+mitre_attack:
+  - T1546.003
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  sequence by host.name
+    [any where event.code == "19"]
+    [any where event.code == "20"]
+    [any where event.code == "21"]
+description: >
+  Detects WMI event-subscription persistence by correlating Sysmon Event IDs 19 (WmiEventFilter), 20 (WmiEventConsumer), and 21 (WmiEventConsumerToFilter binding), indicating registration of a persistent WMI execution trigger.
+known_false_positives: >
+  Legitimate software may register WMI subscriptions for monitoring purposes; verify the process name, subscription name, and query content before escalating.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

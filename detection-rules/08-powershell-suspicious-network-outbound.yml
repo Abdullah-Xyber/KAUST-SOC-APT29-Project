@@ -1,0 +1,18 @@
+name: "APT29 - PowerShell Suspicious Network Outbound"
+language: KQL
+risk_score: 99
+mitre_attack:
+  - T1071.001
+  - T1041
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "1" and process.name: "powershell.exe" and process.command_line:
+  (*Invoke-WebRequest* or *WebClient* or *Net.Sockets.TcpClient*) and
+  process.command_line: *172.20.10.20*
+description: >
+  Detects PowerShell processes initiating outbound network connections to the CALDERA C2 server using web-request or socket cmdlets in the command line. Provides process-layer visibility into data-exfiltration attempts, complementing the network-layer Exfiltration rule (T1041) by detecting the offensive command before the connection is established.
+known_false_positives: >
+  Legitimate administrative scripts may use Invoke-WebRequest to contact internal servers. In this lab, any PowerShell process referencing 172.20.10.20 with web or socket cmdlets outside planned emulation windows should be treated as a critical incident.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

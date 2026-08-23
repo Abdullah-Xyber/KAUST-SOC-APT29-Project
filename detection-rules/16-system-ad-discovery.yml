@@ -1,0 +1,21 @@
+name: "APT29 - System and AD Discovery"
+language: KQL
+risk_score: 47
+mitre_attack:
+  - T1082
+  - T1069
+  - T1007
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "1" and
+  (process.name: ("whoami.exe" or "net.exe" or "nltest.exe" or "systeminfo.exe" or
+  "ipconfig.exe" or "hostname.exe" or "reg.exe") and
+  process.parent.name: ("powershell.exe" or "cmd.exe")) and
+  not process.command_line: (*localgroup* and *administrators*)
+description: >
+  Detects discovery commands (whoami, net, nltest, systeminfo) spawned by PowerShell or CMD, indicative of post-exploitation system and Active Directory enumeration.
+known_false_positives: >
+  Legitimate IT administrative scripts may spawn discovery commands via PowerShell for inventory or monitoring purposes; verify the user context, parent process, and whether the activity correlates with a known maintenance window.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

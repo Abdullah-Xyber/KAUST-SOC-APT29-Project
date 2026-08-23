@@ -1,0 +1,17 @@
+name: "APT29 - Phishing via HTA and Mshta Proxy Execution"
+language: KQL
+risk_score: 99
+mitre_attack:
+  - T1566.001
+  - T1218.005
+  - T1059.001
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "1" and process.name: "powershell.exe" and process.parent.name: "mshta.exe"
+description: >
+  Detects PowerShell spawned by mshta.exe, indicating execution of a malicious HTA file delivered via spearphishing. mshta.exe is a native Windows LOLBin abused by APT29 to proxy execution while evading signature-based defenses.
+known_false_positives: >
+  Legitimate use of mshta.exe spawning PowerShell is extremely rare in enterprise environments; any instance of this parent-child relationship should be treated as high-confidence malicious activity.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

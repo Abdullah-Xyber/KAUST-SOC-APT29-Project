@@ -1,0 +1,19 @@
+name: "APT29 - Process Execution from Suspicious Directory"
+language: KQL
+risk_score: 47
+mitre_attack:
+  - T1036
+  - T1059
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "1" and (process.executable: *AppData* or *Windows\Temp* or *Users\Public*) and
+  not process.name: ("MicrosoftEdgeUpdate.exe" or "setup.exe" or "install.exe" or
+  "FileCoAuth.exe" or "splunkd.exe" or "DismHost.exe" or "OneDrive.exe" or
+  "OneDriveStandaloneUpdater.exe")
+description: >
+  Detects execution of processes from user-writable directories commonly abused by adversaries for staging and executing malicious payloads. In this environment, both Mimikatz and the CALDERA Sandcat agent are staged in these paths, making this rule effective at catching both the initial foothold and post-exploitation tooling.
+known_false_positives: >
+  Legitimate software installers, browser updates, and temporary application files may execute from AppData\Local\Temp or Windows\Temp during normal installation or update processes.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

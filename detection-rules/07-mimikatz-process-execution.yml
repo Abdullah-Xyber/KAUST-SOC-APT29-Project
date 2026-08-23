@@ -1,0 +1,16 @@
+name: "APT29 - Mimikatz Process Execution"
+language: KQL
+risk_score: 99
+mitre_attack:
+  - T1003.006
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "1" and (process.name: "mimikatz.exe" or process.command_line: *mimikatz* or
+  *lsadump* or *dcsync* or *sekurlsa*)
+description: >
+  Detects execution of Mimikatz or Mimikatz-like credential-dumping tools based on process name and command-line arguments. Complements the DCSync Event 4662 detection by catching the offensive tool at the process-execution layer, providing defense-in-depth coverage for credential-access attempts including DCSync, LSA dumping, and Kerberos ticket extraction.
+known_false_positives: >
+  Security researchers or penetration testers running Mimikatz in authorized red-team exercises. In this lab environment, any execution outside of planned emulation windows should be treated as a critical incident.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

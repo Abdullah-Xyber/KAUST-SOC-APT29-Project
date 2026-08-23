@@ -1,0 +1,16 @@
+name: "APT29 - Honeypot Account Access Detected"
+language: KQL
+risk_score: 99
+mitre_attack:
+  - T1087
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  (winlog.event_data.TargetUserName: "svc-backup" or user.name: "svc-backup") and
+  (event.code: "4624" or "4625" or "4768" or "4769")
+description: >
+  Any authentication attempt against the decoy account svc-backup indicates potential adversarial discovery or lateral movement. This account has no legitimate use.
+known_false_positives: >
+  None — the account is a zero-legitimate-use honeypot; any hit is treated as a genuine indicator.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

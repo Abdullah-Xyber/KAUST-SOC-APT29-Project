@@ -1,0 +1,19 @@
+name: "APT29 - PowerShell Script Block Suspicious Content"
+language: KQL
+risk_score: 73
+mitre_attack:
+  - T1059.001
+  - T1546.003
+  - T1021.006
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "4104" and (powershell.file.script_block_text: *Invoke-Command* or
+  *New-CimInstance* or *lsadump* or *ConvertTo-SecureString* or *Register-ScheduledTask* or
+  *Net.Sockets.TcpClient*)
+description: >
+  Detects suspicious PowerShell script content captured via Script Block Logging (Event 4104), including lateral-movement commands, WMI persistence registration, credential dumping, scheduled-task creation, and C2 socket connections. Captures the actual decoded script content before execution, making it significantly harder for adversaries to evade through encoding or obfuscation.
+known_false_positives: >
+  Legitimate administrative automation may use Invoke-Command for remote management, Register-ScheduledTask for maintenance jobs, or New-CimInstance for WMI-based monitoring.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

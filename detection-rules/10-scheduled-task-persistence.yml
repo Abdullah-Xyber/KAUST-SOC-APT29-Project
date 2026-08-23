@@ -1,0 +1,17 @@
+name: "APT29 - Scheduled Task Persistence"
+language: KQL
+risk_score: 73
+mitre_attack:
+  - T1053.005
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  ((process.name: "schtasks.exe" and process.command_line: *create*) or
+  (process.name: "powershell.exe" and process.command_line: *Register-ScheduledTask*)) and
+  not process.parent.name: ("services.exe" or "taskeng.exe" or "taskhostw.exe")
+description: >
+  Detects creation of scheduled tasks via schtasks.exe or the Register-ScheduledTask PowerShell cmdlet, commonly used by APT29 for persistent execution on compromised hosts.
+known_false_positives: >
+  Legitimate software installers and system administrators may create scheduled tasks during application setup or maintenance.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

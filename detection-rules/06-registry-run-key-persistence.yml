@@ -1,0 +1,18 @@
+name: "APT29 - Registry Run Key Persistence"
+language: KQL
+risk_score: 77
+mitre_attack:
+  - T1547.001
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "13" and registry.path: (*CurrentVersion\Run* or *CurrentVersion\RunOnce*) and
+  not process.name: ("OneDriveSetup.exe" or "MsMpEng.exe" or "SppExtComObj.exe" or
+  "msiexec.exe" or "TrustedInstaller.exe" or "msedge.exe") and
+  (registry.data.strings: *Temp* or *Public* or *AppData*)
+description: >
+  Detects registry modifications to autorun keys commonly used by APT29 for persistence on victim workstations.
+known_false_positives: >
+  Legitimate software installations may modify Run keys during setup; excluded process names cover the observed cases.
+source: "APT29_LOTL_Final_Report1 - Appendix B"

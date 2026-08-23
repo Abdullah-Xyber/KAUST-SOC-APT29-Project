@@ -1,0 +1,17 @@
+name: "APT29 - Data Exfiltration Over C2 Channel"
+language: KQL
+risk_score: 99
+mitre_attack:
+  - T1041
+schedule:
+  interval: "1m"
+  lookback: "5m"
+query: |
+  event.code: "3" and process.name: ("powershell.exe" or "cmd.exe") and
+  destination.ip: "172.20.10.20" and destination.port: (8888 or 7010 or 4433 or 9999) and
+  not source.ip: "172.20.10.20" and not process.parent.name: ("services.exe" or "svchost.exe")
+description: >
+  Detects outbound network connections initiated by PowerShell or CMD toward the CALDERA C2 server on known C2 ports, indicating potential data exfiltration over the command-and-control channel following a successful compromise.
+known_false_positives: >
+  Legitimate administrative tools may initiate network connections to internal servers; excluded parent processes and destination-port scoping minimize this risk.
+source: "APT29_LOTL_Final_Report1 - Appendix B"
